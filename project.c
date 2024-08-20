@@ -1,4 +1,24 @@
-int main {
-    printf ("Hello world!\n");
-    return 0;
+#include <stdio.h>
+#include <dlfcn.h>
+
+//The function returns 0 in case of success, -1 in case of failure
+int pseudo_exec (const char* so_file, const char* func_name) {
+
+    //Variables
+    void* handle;
+    void (*func)();
+
+    //The .so file is loaded
+    handle = dlopen (so_file, RTDL_LAZY);
+    if (handle == NULL) {
+        fprintf (stderr, "dlopen error: %s\n", dlerror());
+        return -1; //REMEMBER TO PRINT A GLOBAL ERROR MESSAGE IN MAIN FUNCTION
+    }
+
+    //The symbol of the function is extracted
+    func = (void (*)()) dlsym (handle, func_name);
+    if (func == NULL) {
+        fprintf (stderr, "dlopen error: %s\n", dlerror());
+        return -1;
+    }
 }
