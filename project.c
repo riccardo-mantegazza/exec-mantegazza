@@ -21,4 +21,19 @@ int pseudo_exec (const char* so_file, const char* func_name) {
         fprintf (stderr, "dlopen error: %s\n", dlerror());
         return -1;
     }
+
+    //The execution of the function begins
+    printf ("Execution of function %s...\n", func_name);
+    func();
+
+    //The shared object is closed
+    int ret = 0;
+    ret = dlclose (handle);
+    if (ret == -1) {
+        fprintf (stderr, "dlclose error: %s\n", dlerror());
+        return -1;
+    }
+
+    //End of the exec
+    return 0;
 }
