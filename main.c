@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-#include "project.c"
+#include "pseudo_exec.c"
 
 int main () {
     int ret;
