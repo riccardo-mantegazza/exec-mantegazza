@@ -1,5 +1,10 @@
 #include <stdio.h>
 #include <dlfcn.h>
+#include <setjmp.h>
+
+#include "common.h"
+
+jmp_buf env;
 
 //The function returns 0 in case of success, -1 in case of failure
 int pseudo_exec (const char* so_file, const char* func_name) {
@@ -9,22 +14,25 @@ int pseudo_exec (const char* so_file, const char* func_name) {
     void (*func)();
 
     //The .so file is loaded
-    handle = dlopen (so_file, RTDL_LAZY);
+    handle = dlopen (so_file, RTLD_LAZY);
     if (handle == NULL) {
         fprintf (stderr, "dlopen error: %s\n", dlerror());
-        return -1; //REMEMBER TO PRINT A GLOBAL ERROR MESSAGE IN MAIN FUNCTION
+        return -1;
     }
 
     //The symbol of the function is extracted
     func = (void (*)()) dlsym (handle, func_name);
     if (func == NULL) {
         fprintf (stderr, "dlopen error: %s\n", dlerror());
+        dlclose (handle);
         return -1;
     }
 
     //The execution of the function begins
     printf ("Execution of function %s...\n", func_name);
-    func();
+
+    if (setjmp (env) == 0) to_be_interrupted();
+    else func();
 
     //The shared object is closed
     int ret = 0;

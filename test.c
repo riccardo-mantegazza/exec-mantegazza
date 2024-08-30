@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-#include "main.c"
+#include "common.h"
 
 int tester (const char *func_name) {
     int ret;

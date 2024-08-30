@@ -16,7 +16,7 @@ void f2() {
     printf ("Choose the exponent e: ");
     scanf ("%d", &e);
     int result = b^e;
-    printf ("%d ^ %d = %\n", &b, &e, &result);
+    printf ("%d ^ %d = %d\n", b, e, result);
 }
 
 //f3 draws a square with the edge of a chosen number
@@ -75,7 +75,7 @@ void f5() {
         }
     }
 
-    printf ("The factorial of %d is ", &n);
+    printf ("The factorial of %d is ", n);
     int ret = 1;
     if (n != 0 && n != 1) {
         while (n != 1) {
@@ -83,6 +83,6 @@ void f5() {
             n--;
         }
     }
-    printf ("%d.\n", &ret);
+    printf ("%d.\n", ret);
 
 }

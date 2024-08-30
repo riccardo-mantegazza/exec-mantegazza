@@ -1,7 +1,6 @@
 #include <stdio.h>
 
-#include "pseudo_exec.c"
-#include "test.c"
+#include "common.h"
 
 int main () {
     int correct = 0;
@@ -27,6 +26,6 @@ int main () {
     ret = tester("f5");
     if (ret == 0) correct++;
 
-    printf ("%d/5 test passed.\n");
+    printf ("%d/5 test passed.\n", correct);
     return 0;
 }
