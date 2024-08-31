@@ -1,4 +1,6 @@
-#include "stdio.h"
+#include <stdio.h>
+
+#include "common.h"
 
 //f1 is a simple print
 void f1() {

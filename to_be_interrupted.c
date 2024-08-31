@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <setjmp.h>
 
-extern jmp_buf env;
+#include "common.h"
 
 void to_be_interrupted () {
     printf ("Mr. and Mrs. Dursley, of number four, Privet Drive, were proud to say that they were perfectly normal, thank you very much.");

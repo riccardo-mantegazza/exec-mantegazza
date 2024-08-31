@@ -1,7 +1,6 @@
 #include <stdio.h>
 
-#include "to_be_interrupted.c"
-#include "functions.c"
+#include "common.h"
 
 void to_be_interrupted();
 void f1();

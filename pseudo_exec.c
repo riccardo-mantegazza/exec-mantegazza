@@ -31,7 +31,10 @@ int pseudo_exec (const char* so_file, const char* func_name) {
     //The execution of the function begins
     printf ("Execution of function %s...\n", func_name);
 
-    if (setjmp (env) == 0) to_be_interrupted();
+    if (setjmp (env) == 0) {
+        to_be_interrupted();
+        longjmp(env, 1);
+    }
     else func();
 
     //The shared object is closed
