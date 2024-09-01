@@ -4,6 +4,7 @@
 
 #include "common.h"
 
+
 jmp_buf env;
 
 //The function returns 0 in case of success, -1 in case of failure
@@ -32,10 +33,14 @@ int pseudo_exec (const char* so_file, const char* func_name) {
     printf ("Execution of function %s...\n", func_name);
 
     if (setjmp (env) == 0) {
-        to_be_interrupted();
+        printf ("pseudo_exec: interrupting the execution\n");
+        printf ("Hello! We are in the other context!\n");
         longjmp(env, 1);
     }
-    else func();
+    else {
+        printf ("pseudo_exec: resuming the execution\n");
+        func();
+    }
 
     //The shared object is closed
     int ret = 0;

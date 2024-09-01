@@ -1,31 +1,52 @@
+#include <sys/types.h>
+#include <sys/wait.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <string.h>
+#include <errno.h>
 
 #include "common.h"
 
-int main () {
-    int correct = 0;
-    int ret = 0;
+int main(int argc, char** argv) {
+  if (argc < 4) {
+    printf("usage: %s <int> <path> <args>\n", argv[0]);
+    printf(" <int> number of instances\n");
+    printf(" <path> executable to launch\n");
+    printf(" <args> arguments passed to each instance of the executable\n");
+    return 1;
+  }
 
-    printf ("f1 test:\n\n");
-    ret = tester("f1");
-    if (ret == 0) correct++;
+  int num_instances = atoi(argv[1]);
+  const char* so_file = argv[2];
+  const char* func_name = argv[3];
+  int active_instances = 0;
 
-    printf ("f2 test:\n\n");
-    ret = tester("f2");
-    if (ret == 0) correct++;
+  for (int i = 0; i < num_instances; ++i) {
+    pid_t child_pid = fork();
+    if (child_pid < 0) {
+      printf("Failed to fork, errno=%s\n", strerror(errno));
+      return 1;
+    } else if (child_pid == 0) {
+      int result = pseudo_exec(so_file, func_name);
+      exit (result);
+    } else {
+      active_instances++;
+    }
+  } 
 
-    printf ("f3 test:\n\n");
-    ret = tester("f3");
-    if (ret == 0) correct++;
+  int status;
+  while (active_instances) {
+    pid_t child_pid = wait(&status);
+    if (child_pid > 0) {
+      printf("Process %d terminated, remaining instances: %d\n", child_pid, active_instances - 1);
+      active_instances--;
+    } else {
+      printf("Failed to wait, errno=%s\n", strerror(errno));
+      return 1;
+    }
+  }
 
-    printf ("f4 test:\n\n");
-    ret = tester("f4");
-    if (ret == 0) correct++;
-
-    printf ("f5 test:\n\n");
-    ret = tester("f5");
-    if (ret == 0) correct++;
-
-    printf ("%d/5 test passed.\n", correct);
-    return 0;
+  printf("Launcher terminating\n");
+  return 0;
 }
