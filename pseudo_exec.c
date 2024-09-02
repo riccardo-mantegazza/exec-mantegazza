@@ -1,55 +1,37 @@
 #include <stdio.h>
 #include <dlfcn.h>
-#include <setjmp.h>
+#include <stdlib.h>
 
-#include "common.h"
-
-
-jmp_buf env;
-
-//The function returns 0 in case of success, -1 in case of failure
-int pseudo_exec (const char* so_file, const char* func_name) {
-
-    //Variables
+// The function returns -1 in case of an error
+int pseudo_exec(const char* so_file, const char* func_name) {
     void* handle;
     void (*func)();
 
-    //The .so file is loaded
-    handle = dlopen (so_file, RTLD_LAZY);
+    // Loading of the .so file
+    handle = dlopen(so_file, RTLD_LAZY);
     if (handle == NULL) {
-        fprintf (stderr, "dlopen error: %s\n", dlerror());
+        fprintf(stderr, "dlopen error: %s\n", dlerror());
         return -1;
     }
 
-    //The symbol of the function is extracted
-    func = (void (*)()) dlsym (handle, func_name);
+    // Extraction of the symbol of the function
+    func = (void (*)()) dlsym(handle, func_name);
     if (func == NULL) {
-        fprintf (stderr, "dlopen error: %s\n", dlerror());
-        dlclose (handle);
+        fprintf(stderr, "dlsym error: %s\n", dlerror());
+        dlclose(handle);
         return -1;
     }
 
-    //The execution of the function begins
-    printf ("Execution of function %s...\n", func_name);
+    // Execution of the function
+    printf("Execution of function %s...\n", func_name);
+    func();
 
-    if (setjmp (env) == 0) {
-        printf ("pseudo_exec: interrupting the execution\n");
-        printf ("Hello! We are in the other context!\n");
-        longjmp(env, 1);
-    }
-    else {
-        printf ("pseudo_exec: resuming the execution\n");
-        func();
-    }
-
-    //The shared object is closed
-    int ret = 0;
-    ret = dlclose (handle);
-    if (ret == -1) {
-        fprintf (stderr, "dlclose error: %s\n", dlerror());
+    // Closing the shared object
+    if (dlclose(handle) != 0) {
+        fprintf(stderr, "dlclose error: %s\n", dlerror());
         return -1;
     }
 
-    //End of the exec
-    return 0;
+    // End the main process
+    exit (0);
 }
