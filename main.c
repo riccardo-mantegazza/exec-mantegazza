@@ -21,31 +21,8 @@ int main(int argc, char** argv) {
   const char* so_file = argv[2];
   const char* func_name = argv[3];
   int active_instances = 0;
-
-  for (int i = 0; i < num_instances; ++i) {
-    pid_t child_pid = fork();
-    if (child_pid < 0) {
-      printf("Failed to fork, errno=%s\n", strerror(errno));
-      return 1;
-    } else if (child_pid == 0) {
-      int result = pseudo_exec(so_file, func_name);
-      exit (result);
-    } else {
-      active_instances++;
-    }
-  } 
-
-  int status;
-  while (active_instances) {
-    pid_t child_pid = wait(&status);
-    if (child_pid > 0) {
-      printf("Process %d terminated, remaining instances: %d\n", child_pid, active_instances - 1);
-      active_instances--;
-    } else {
-      printf("Failed to wait, errno=%s\n", strerror(errno));
-      return 1;
-    }
-  }
+  int ret = pseudo_exec (so_file, func_name);
+  if (ret == -1) printf ("An error occured\n");
 
   printf("Launcher terminating\n");
   return 0;
