@@ -202,7 +202,6 @@ void disastrOS_start(void (*f)(void*), void* f_args, char* logfile){
   //List_init(&resources_list);
   //List_init(&timer_list);
 
-
   /* INITIALIZATION OF SYSCALL AND INTERRUPT INFRASTRUCTIRE*/
   disastrOS_debug("setting entry point for system shudtown... ");
   getcontext(&main_context); //<< we will come back here on shutdown
@@ -231,7 +230,6 @@ void disastrOS_start(void (*f)(void*), void* f_args, char* logfile){
   running=PCB_alloc();
   running->status=Running;
   init_pcb=running;
-  
   // create a trampoline for the first process (see spawn)
   disastrOS_debug("preparing trampoline for first process ... ");
   getcontext(&running->cpu_state);
@@ -240,7 +238,6 @@ void disastrOS_start(void (*f)(void*), void* f_args, char* logfile){
   running->cpu_state.uc_stack.ss_flags = 0;
   running->cpu_state.uc_link = &main_context;
   makecontext(&running->cpu_state, (void(*)()) f, 1, f_args);
-
   // initialize timers and signals
   setupSignals();
   

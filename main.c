@@ -4,6 +4,12 @@
 #include "disastrOS_globals.h"
 #include "disastrOS_syscalls.h"
 
+void initFunction(void* args) {
+  printf ("We are in the function initFunction\n");
+  disastrOS_exit(0);
+}
+
+
 int main (int argc, char** argv) {
     if (argc < 3) {
         fprintf (stderr, "Usage: %s mylib.so my_function\n", argv[0]);
@@ -13,6 +19,7 @@ int main (int argc, char** argv) {
     const char* so_file = argv[1];
     const char* func_name = argv[2];
 
+    disastrOS_start(initFunction, 0, "logfile.txt");
     if (running == NULL) {
         fprintf (stderr, "Error: no running process context available.\n");
         return 1;
