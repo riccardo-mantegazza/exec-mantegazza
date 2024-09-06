@@ -1,5 +1,3 @@
-#pragma once
-
 enum PoolAllocatorResult{
   Success=0x0,
   NotEnoughMemory=-1,

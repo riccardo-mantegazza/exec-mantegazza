@@ -32,5 +32,4 @@ void disastrOS_sleep(int);
 // debug function, prints the state of the internal system
 void disastrOS_printStatus();
 
-int pseudo_exec (const char* so_file, const char* func_name);
 
