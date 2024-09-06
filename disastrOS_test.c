@@ -29,7 +29,16 @@ void initFunction(void* args) {
   disastrOS_printStatus();
   printf("hello, I am init and I just started\n");
   disastrOS_spawn(sleeperFunction, 0);
+  char** argv = (char**) args;
   
+  if (argv[1] && argv[2]) {
+    printf("Calling pseudo_exec with shared library: %s and function: %s\n", argv[1], argv[2]);
+    int ret = pseudo_exec(argv[1], argv[2]);
+    if (ret == -1) printf ("something went wrong in the pseudo_exec\n");
+  } else {
+    printf("Error: Please provide both a shared library and a function name.\n");
+  }
+
 
   printf("I feel like to spawn 10 nice threads\n");
   int alive_children=0;
@@ -52,16 +61,23 @@ void initFunction(void* args) {
 }
 
 int main(int argc, char** argv){
-  char* logfilename=0;
-  if (argc>1) {
-    logfilename=argv[1];
-  }
-  // we create the init process processes
+  /*// we create the init process processes
   // the first is in the running variable
   // the others are in the ready queue
   printf("the function pointer is: %p", childFunction);
   // spawn an init process
   printf("start\n");
-  disastrOS_start(initFunction, 0, logfilename);
+  disastrOS_start(initFunction, 0, "logfile.txt");
+  printf ("main process ended\n");
+  return 0;*/
+  if (argc < 3) {
+    printf("Usage: %s <shared_library.so> <function_name>\n", argv[0]);
+    return -1;
+  }
+
+  printf("the function pointer is: %p\n", childFunction);
+  printf("start\n");
+  disastrOS_start(initFunction, argv, "logfile.txt");
+  printf ("main process ended\n");
   return 0;
 }

@@ -10,6 +10,7 @@
 // returns the pid of the child
 // it starts a function in the form of void f();
 void internal_spawn(){
+  printf ("we are in the internal_spawn function\n\n");
   static PCB* new_pcb;
   new_pcb=PCB_alloc();
   if (!new_pcb) {
@@ -18,6 +19,7 @@ void internal_spawn(){
   } 
 
   new_pcb->status=Ready;
+  
 
   // sets the parent of the newly created process to the running process
   new_pcb->parent=running;

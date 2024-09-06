@@ -22,13 +22,12 @@ OBJS=pool_allocator.o\
      disastrOS_sleep.o\
      disastrOS_shutdown.o\
      disastrOS_schedule.o\
-     disastrOS_preempt.o
+     disastrOS_preempt.o\
+	 pseudo_exec.o
 
-LIBS=libdisastrOS.a
-
+MYLIB_OBJS=my_functions.o
+MYLIB = mylib.so
 BINS=disastrOS_test
-
-#disastros_test
 
 .phony: clean all
 
@@ -38,9 +37,11 @@ all:	$(LIBS) $(BINS)
 %.o:	%.c $(HEADERS)
 	$(CC) $(CCOPTS) -c -o $@  $<
 
-libdisastrOS.a: $(OBJS) 
-	$(AR) -rcs $@ $^
-	$(RM) $(OBJS)
+$(MYLIB): $(MYLIB_OBJS)
+	$(CC) -fPIC -shared -o $@ $^
+
+$(BINS): $(OBJS) $(MYLIB)
+	$(CC) $(CCOPTS) -o $@ $^ -Wl,-rpath=. -lmylib
 
 disastrOS_test:		disastrOS_test.c $(LIBS)
 	$(CC) $(CCOPTS) -o $@ $^
