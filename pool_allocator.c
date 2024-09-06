@@ -89,4 +89,3 @@ PoolAllocatorResult PoolAllocator_releaseBlock(PoolAllocator* a, void* block_){
   ++a->size;
   return Success;
 }
-

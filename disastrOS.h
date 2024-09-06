@@ -31,5 +31,3 @@ void disastrOS_sleep(int);
 
 // debug function, prints the state of the internal system
 void disastrOS_printStatus();
-
-

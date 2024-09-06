@@ -1,3 +1,5 @@
+#pragma once
+
 enum PoolAllocatorResult{
   Success=0x0,
   NotEnoughMemory=-1,
@@ -33,4 +35,3 @@ void* PoolAllocator_getBlock(PoolAllocator* allocator);
 PoolAllocatorResult PoolAllocator_releaseBlock(PoolAllocator* allocator, void* block);
 			
 const char* PoolAllocator_strerror(PoolAllocatorResult result);
-

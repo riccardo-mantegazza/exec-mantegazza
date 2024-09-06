@@ -88,4 +88,3 @@ void TimerList_print(ListHead* timers) {
   }
   printf("]");
 }
-

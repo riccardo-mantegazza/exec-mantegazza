@@ -24,4 +24,3 @@ int TimerList_removeCurrent(ListHead* timers);
 void TimerList_print(ListHead* timers);
 
 int TimerItem_free(TimerItem* item);
-

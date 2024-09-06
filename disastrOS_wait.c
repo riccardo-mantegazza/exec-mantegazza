@@ -64,4 +64,3 @@ void internal_wait(){
   PCB* next_running= (PCB*) List_detach(&ready_list, ready_list.first);
   running=next_running;
 }
-

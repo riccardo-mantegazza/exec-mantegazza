@@ -7,4 +7,3 @@
 void internal_fork() {
   assert(0 && "FORK NOT IMPLEMENTED IN REAL SYSTEM, NO MMU");
 }
-

@@ -38,4 +38,3 @@ void internal_schedule() {
     disastrOS_debug(" %d\n", running->pid);
   }
 }
-

@@ -7,4 +7,3 @@
 void internal_preempt() {
   internal_schedule();
 }
-

@@ -42,4 +42,3 @@ void internal_spawn(){
   void (*new_function) (void*)= (void(*)(void*))  running->syscall_args[0];
   makecontext(&new_pcb->cpu_state, (void(*)())  new_function, 1, (void*)running->syscall_args[1]);
 }
-
